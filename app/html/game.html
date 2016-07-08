@@ -3,14 +3,13 @@
     <head>
         <meta charset="UTF-8">
         <title>Battle of the Sith</title>
-        <link rel="stylesheet" href="../stylesheets/game.css">
+        <link rel="stylesheet" href="stylesheets/game.css">
     </head>
     <body>
         <div class="game">
             <div ng-hide="started">
                 <h1 class="gameInst" >Click the Up Arrow to Start</h1>
             </div>
-
 
             <div class="asteroidRow" ng-repeat="row in listAsteroids">
                 <img class="asteroidCol" ng-repeat="col in row" ng-src="{{col.img}}"

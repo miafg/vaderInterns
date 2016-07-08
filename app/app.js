@@ -8,6 +8,10 @@ app.config(function($routeProvider) {
             templateUrl: 'home.html',
             controller: 'homeCtrl'
         })
+        .when('/about', {
+            templateUrl: 'about.html',
+            controller: 'aboutCtrl'
+        })
         .when('/boris', {
             templateUrl: 'boris.html',
             controller: 'borisCtrl'
@@ -32,5 +36,6 @@ app.config(function($routeProvider) {
             templateUrl: 'game.html',
             controller: 'gameCtrl'
         })
+        .otherwise({redirectTo: '/home'});
 });
 

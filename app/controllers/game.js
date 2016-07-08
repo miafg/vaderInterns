@@ -12,10 +12,12 @@ var Asteriod = function(posTop, posLeft, scale, image) {
 app.controller('gameCtrl', ['$scope', '$document', '$window', function($scope, $document, $window) {
     var screenHeight = window.innerHeight;
     var screenWidth = window.innerWidth;
+    console.log("width " + screenWidth);
+    console.log("half width " + screenWidth / 2);
     $scope.darth = {
         top: screenHeight - 175,
-        left: screenWidth / 3,
-        img: "http://i.telegraph.co.uk/multimedia/archive/01962/falcon-2_1962145c.jpg"
+        left: screenWidth / 2,
+        img: "../images/falcon.jpg"
     };
 
     //function to check if spaceship is on the screen
@@ -26,10 +28,6 @@ app.controller('gameCtrl', ['$scope', '$document', '$window', function($scope, $
     var move = function() {
         //move spaceship
         $scope.falconStyle = "top: " + $scope.darth.top + "px; left: " + $scope.darth.left + "px";
-    }
-
-    var collision = function(top, left, scale) {
-
     }
 
     $scope.showAsteroid = function (top, left, scale) {
@@ -60,13 +58,58 @@ app.controller('gameCtrl', ['$scope', '$document', '$window', function($scope, $
             }
             leftCols = left;
             var scale = Math.random() * 0.2 + 0.1;
-            var img = "https://upload.wikimedia.org/wikipedia/commons/thumb/3/32/Dawn-image-070911.jpg/220px-Dawn-image-070911.jpg";
+            var img = "../images/asteroid.jpg";
             var newAst = new Asteriod(top, left, scale, img);
             $scope.listAsteroids[i][j] = newAst;
         }
     }
 
     var velocity = 10;
+    var falconImg = new Image();
+    falconImg.src = $scope.darth.img;
+    var falconScale = 0.2;
+    var falconW = falconImg.width * falconScale;
+    var falconH = falconImg.height * falconScale;
+    console.log("HEIGHT " + falconH);
+    console.log("WIDTH " + falconW);
+    var asteroidImg = new Image();
+    asteroidImg.src = "../images/asteroid.jpg";
+    var asteroidW = asteroidImg.width;
+    var asteroidH = asteroidImg.height;
+    var collision = function() {
+        for (var i = 0; i < row; i++) {
+            for (var j = 0; j < col; j++) {
+                var falconTop = $scope.darth.top;
+                var falconLeft = $scope.darth.left;
+                var falconBottom = falconTop + falconH;
+                var falconRight = falconLeft + falconW;
+
+                var curr = $scope.listAsteroids[i][j];
+                var asteroidTop = curr.posTop;
+                var asteroidLeft = curr.posLeft;
+                var asteroidBottom = asteroidTop + (asteroidH * curr.scale);
+                var asteroidRight = asteroidLeft + (asteroidW * curr.scale);
+
+                var leftTop = falconLeft > asteroidLeft && falconLeft < asteroidRight && falconTop > asteroidTop
+                    && falconTop < asteroidBottom;
+                var rightTop = falconRight > asteroidLeft && falconRight < asteroidRight && falconTop > asteroidTop
+                    && falconTop < asteroidBottom;
+                var leftBottom = falconLeft > asteroidLeft && falconLeft < asteroidRight && falconBottom > asteroidTop
+                    && falconBottom < asteroidBottom;
+                var rightBottom = falconRight > asteroidLeft && falconRight < asteroidRight && falconBottom > asteroidTop
+                    && falconBottom < asteroidBottom;
+
+               /* console.log("FALCON DIMENSIONS: \n" + "top: " + falconTop + "\nleft: " + falconLeft + "\nbottom: " +
+                    falconBottom + "\nright: " + falconRight);
+                console.log("ASTEROID DIMENSIONS: \n" + "top: " + asteroidTop + "\nleft: " + asteroidLeft + "\nbottom: " +
+                    asteroidBottom + "\nright: " + asteroidRight);*/
+                if (leftTop || rightTop || leftBottom || rightBottom) {
+                    console.log("COLLISION");
+                }
+            }
+        }
+    }
+
 
     $scope.playGame = function (event) {
          if (event.keyCode == 38 && !$scope.started) {
@@ -104,9 +147,9 @@ app.controller('gameCtrl', ['$scope', '$document', '$window', function($scope, $
                 default:
                     break;
             }
+             collision();
          }
     }
-    console.log(document);
 }]);
 
 
