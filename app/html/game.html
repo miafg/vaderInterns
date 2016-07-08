@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Battle of the Sith</title>
+        <link rel="stylesheet" href="../stylesheets/game.css">
+    </head>
+    <body>
+        <div class="game">
+            <div ng-hide="started">
+                <h1 class="gameInst" >Click the Up Arrow to Start</h1>
+            </div>
+
+
+            <div class="asteroidRow" ng-repeat="row in listAsteroids">
+                <img class="asteroidCol" ng-repeat="col in row" ng-src="{{col.img}}"
+                     style="{{showAsteroid(col.posTop, col.posLeft, col.scale)}}">
+            <div/>
+            <img class="falcon" id="falcon" ng-src={{darth.img}} style={{falconStyle}}>
+            <input class="gameControls" ng-keyup="playGame($event)">
+        </div>
+    </body>
+</html>

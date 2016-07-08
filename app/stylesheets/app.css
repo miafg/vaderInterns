@@ -1,0 +1,164 @@
+/* app css stylesheet */
+html, body {
+    font-family: "Raleway";
+    width: 100%;
+    height: 100%;
+    left:0;
+    text-align: center;
+    overflow: hidden;
+    display: block;
+}
+
+.container {
+    position: relative;
+    background-color: white;
+    left: 0;
+    border-top: 65px;
+    margin: 0;
+    display: flex;
+    font-weight: 100;
+    text-align: center;
+    justify-content: center;
+}
+
+.container h1 {
+    font-size: 225%;
+    font-weight: 200;
+    font-family: "Raleway";
+}
+
+.row {
+    display: flex;
+    padding-left: 20px;
+}
+
+
+.menu {
+    text-align: center;
+    background-color: black;
+    font-color: white;
+}
+
+.menu ul {
+    border-top: 1px solid #636366;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.menu li {
+    border-bottom: 1px solid #636366;
+    line-height: 45px;
+    padding-bottom: 3px;
+    padding-top: 3px;
+}
+
+.menu a {
+    color: lightgray;
+    font-size: 20px;
+    font-family: Raleway;
+    font-weight: 200;
+    text-decoration: none;
+    text-transform: uppercase;
+}
+
+.icon-menu {
+    color: black;
+    cursor: pointer;
+    icon: "menu";
+    font-size: 20px;
+    font-weight: 200;
+    font-family:"Raleway";
+    text-transform: uppercase;
+}
+
+.icon-menu-content {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+}
+
+.imageContainer {
+    transform: scale(0.70, 0.70);
+    height: 40px;
+}
+
+.homeimg {
+    padding-top: 30px;
+}
+
+.about-row{
+    display: flex;
+    justify-content: center;
+    font-weight: 200;
+}
+
+p {
+    font-family: Raleway;
+    font-weight: 200;
+    text-align: left;
+    flex-wrap: wrap;
+    font-size: 18px;
+    height: 400px;
+    width: 500px;
+    padding-top: 40px;
+}
+
+.slider-nav {
+    text-align: center;
+    margin-top: 20px;
+    justify-content: center;
+    display: flex;
+}
+
+.arrow-prev {
+    margin-right: 45px;
+    display: inline-block;
+    vertical-align: top;
+    margin-top: 9px;
+}
+
+.arrow-next {
+    margin-left: 45px;
+    display: inline-block;
+    vertical-align: top;
+    margin-top: 9px;
+}
+
+.slider-dots {
+    list-style: none;
+    display: inline-block;
+    padding-left: 0;
+    margin-bottom: 0;
+}
+
+.slider-dots li {
+    color: #bbbcbc;
+    display: inline;
+    font-size: 30px;
+    margin-right: 5px;
+}
+
+.slider-dots li.active-dot {
+    color: #363636;
+}
+
+.ng-hide {
+    transition: -.5s;
+}
+
+.aboutTitle {
+    font-family: Raleway;
+    font-size: 20px;
+    font-weight: 900;
+}
+
+main {
+    height: 100%;
+    width: 100%;
+}
+
+.injection {
+    height: 100%;
+    width: 100%;
+}

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>VADER Interns</title>
+        <meta charset="utf-8"/>
+        <link rel="stylesheet" href="../stylesheets/app.css"/>
+        <link rel="stylesheet" href="../bower_components/angular-material/angular-material.css">
+        <script src="../bower_components/angular/angular.min.js"></script>
+        <script src="../bower_components/angular-route/angular-route.min.js"></script>
+        <script src="../bower_components/angular-animate/angular-animate.min.js"></script>
+        <script src="../bower_components/angular-aria/angular-aria.min.js"></script>
+        <script src="../bower_components/angular-messages/angular-messages.min.js"></script>
+        <script src="../bower_components/angular-material/angular-material.min.js"></script>
+        <link rel = "stylesheet" href = "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"/><!--
+        <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">-->
+        <link href='https://fonts.googleapis.com/css?family=Raleway' rel='stylesheet' type='text/css'>
+        <link href='https://fonts.googleapis.com/css?family=Indie+Flower' rel='stylesheet' type='text/css'>
+    </head>
+
+    <body ng-app="myApp" ng-controller="myCtrl">
+
+        <header class="container" ng-style="page != ' Battle of the Sith ' ? {'border-bottom': '1px solid #636366'}:
+                                                                                              {'border-bottom': '0px'}">
+
+            <md-content class="icon-menu-content">
+                <div class="icon-menu" ng-click="menuClick()">Menu
+                    <i class="fa fa-bars"></i>
+                </div>
+            </md-content>
+            <h1 class="col-sm-8" style={{mainTitleStyle}}>{{title}}</h1>
+        </header>
+
+        <md-sidenav md-component-id="sidenav" class="menu" href="/">
+            <div class="row">
+                <div class ="icon-close" ng-click="menuClick()">
+                    <img src="http://s3.amazonaws.com/codecademy-content/courses/ltp2/img/uber/close.png">
+                </div>
+            </div>
+            <ul>
+                <li><a href="#/" ng-click="menuClose($event)"> Home </a> </li>
+                <li><a href="#boris" ng-click="menuClose($event)"> Boris </a> </li>
+                <li><a href="#luis" ng-click="menuClose($event)"> Luis </a> </li>
+                <li><a href="#joi" ng-click="menuClose($event)"> Joi </a> </li>
+                <li><a href="#mia" ng-click="menuClose($event)"> Mia </a> </li>
+                <li><a href="#darth" ng-click="menuClose($event)"> Fun Facts About Darth </a> </li>
+                <li><a href="#game" ng-click="menuClose($event)"> Battle of the Sith </a> </li>
+            </ul>
+        </md-sidenav>
+
+        <main>
+            <div class="injection" ng-view></div>
+        </main>
+
+        <!-- Modules -->
+        <script src="../app.js"></script>
+        <script src="../controllers/home.js"></script>
+        <script src="../controllers/boris.js"></script>
+        <script src="../controllers/luis.js"></script>
+        <script src="../controllers/joi.js"></script>
+        <script src="../controllers/mia.js"></script>
+        <script src="../controllers/darth.js"></script>
+        <script src="../controllers/game.js"></script>
+        <!-- Controllers-->
+        <script src="../controllers/controller.js"></script>
+
+    </body>
+
+
+</html>
