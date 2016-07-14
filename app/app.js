@@ -5,37 +5,37 @@ var app = angular.module('myApp', ['ngMaterial', 'ngRoute']);
 app.config(function($routeProvider) {
     $routeProvider
         .when('/', {
-            templateUrl: 'home.html',
+            templateUrl: 'app/html/home.html',
             controller: 'homeCtrl'
         })
         .when('/about', {
-            templateUrl: 'about.html',
+            templateUrl: 'app/html/about.html',
             controller: 'aboutCtrl'
         })
         .when('/boris', {
-            templateUrl: 'boris.html',
+            templateUrl: 'app/html/boris.html',
             controller: 'borisCtrl'
         })
         .when('/joi', {
-            templateUrl: 'joi.html',
+            templateUrl: 'app/html/joi.html',
             controller: 'joiCtrl'
         })
         .when('/luis', {
-            templateUrl: 'luis.html',
+            templateUrl: 'app/html/luis.html',
             controller: 'luisCtrl'
         })
         .when('/mia', {
-            templateUrl: 'mia.html',
+            templateUrl: 'app/html/mia.html',
             controller: 'miaCtrl'
         })
         .when('/darth', {
-            templateUrl: 'darth.html',
+            templateUrl: 'app/html/darth.html',
             controller: 'darthCtrl'
         })
         .when('/game', {
-            templateUrl: 'game.html',
+            templateUrl: 'app/html/game.html',
             controller: 'gameCtrl'
         })
-        .otherwise({redirectTo: '/home'});
+        .otherwise({redirectTo: '/'});
 });
 

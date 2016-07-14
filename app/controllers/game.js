@@ -17,7 +17,7 @@ app.controller('gameCtrl', ['$scope', '$document', '$window', function($scope, $
     $scope.darth = {
         top: screenHeight - 175,
         left: screenWidth / 2,
-        img: "../images/falcon.jpg"
+        img: "app/images/falcon.jpg"
     };
 
     //function to check if spaceship is on the screen
@@ -58,7 +58,7 @@ app.controller('gameCtrl', ['$scope', '$document', '$window', function($scope, $
             }
             leftCols = left;
             var scale = Math.random() * 0.2 + 0.1;
-            var img = "../images/asteroid.jpg";
+            var img = "app/images/asteroid.jpg";
             var newAst = new Asteriod(top, left, scale, img);
             $scope.listAsteroids[i][j] = newAst;
         }
@@ -73,7 +73,7 @@ app.controller('gameCtrl', ['$scope', '$document', '$window', function($scope, $
     console.log("HEIGHT " + falconH);
     console.log("WIDTH " + falconW);
     var asteroidImg = new Image();
-    asteroidImg.src = "../images/asteroid.jpg";
+    asteroidImg.src = "app/images/asteroid.jpg";
     var asteroidW = asteroidImg.width;
     var asteroidH = asteroidImg.height;
     var collision = function() {
