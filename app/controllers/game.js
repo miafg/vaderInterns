@@ -190,50 +190,57 @@ app.controller('gameCtrl', ['$scope', '$document', '$window', function($scope, $
     }
 
     function keyController(e) {
-        if (!gameAnimate.value) {
-            //if the game is paused unpause it
-            gameAnimate.value = true;
-            animate();
-        } else {
-            //if game is animated, check the key code
-            var width = myGameArea.getWidth();
-            var height = myGameArea.getHeight();
-            switch (e.keyCode) {
-                case 27:
-                    //escape
-                    restartGame();
-                    break;
-                case 37:
-                    //left arrow
-                    if (myGamePiece.x >= 15) {
-                        myGamePiece.x -= 15;
-                    }
-                    break;
-                case 38:
-                    //up arrow
-                    if (myGamePiece.y >= 35) {
-                        myGamePiece.y -= 15;
-                    }
-                    break;
-                case 39:
-                    //right arrow
-                    if (myGamePiece.x < width - 65) {
-                        myGamePiece.x += 15;
-                    }
-                    break;
-                case 40:
-                    //down arrow
-                    if (myGamePiece.y < height - 105) {
-                        myGamePiece.y += 15;
-                    }
-                    break;
-                case 80:
-                    //'p'
-                    gameAnimate.value = false;
-                default:
-                    break;
-            }
-            crossedFinish();
+        //check the key code
+        var width = myGameArea.getWidth();
+        var height = myGameArea.getHeight();
+        switch (e.keyCode) {
+            case 27:
+                //escape
+                restartGame();
+                break;
+            case 32:
+                //space
+                if (!gameAnimate.value) {
+                    gameAnimate.value = true;
+                    animate();
+                }
+                break;
+            case 37:
+                //left arrow
+                if (myGamePiece.x >= 15) {
+                    myGamePiece.x -= 15;
+                }
+                break;
+            case 38:
+                //up arrow
+                if (myGamePiece.y >= 35) {
+                    myGamePiece.y -= 15;
+                }
+                break;
+            case 39:
+                //right arrow
+                if (myGamePiece.x < width - 65) {
+                    myGamePiece.x += 15;
+                }
+                break;
+            case 40:
+                //down arrow
+                if (myGamePiece.y < height - 105) {
+                    myGamePiece.y += 15;
+                }
+                break;
+            case 80:
+                //'p'
+                gameAnimate.value = false;
+                break;
+            case 83:
+                //'s'
+                gameAnimate.value = true;
+                animate();
+                break;
+            default:
+                break;
+        crossedFinish();
         }
     }
 
