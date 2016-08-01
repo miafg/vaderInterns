@@ -21,10 +21,8 @@
 
         <header class="container" ng-style="page != ' Battle of the Sith ' ? {'border-bottom': '1px solid #636366'}:
                                                                                               {'border-bottom': '0px'}">
-
-            <md-content class="icon-menu-content">
-                <div class="icon-menu" ng-click="menuClick()">Menu
-                    <i class="fa fa-bars"></i>
+            <md-content class="icon-menu-content" id="menu" ng-click="menuClick()">
+                <div class="icon-menu" >Menu<i class="fa fa-bars fafaIcon"></i>
                 </div>
             </md-content>
             <h1 class="col-sm-8" style={{mainTitleStyle}}>{{title}}</h1>

@@ -6,6 +6,7 @@ app.controller('myCtrl', ['$scope', "$mdSidenav", function ($scope, $mdSidenav) 
     $scope.page = ' Home ';
     $scope.menuClick = function () {
         $mdSidenav('sidenav').toggle();
+        document.getElementById('menu').blur();
     };
 
     $scope.menuClose = function ($event) {

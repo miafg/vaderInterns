@@ -5,10 +5,10 @@
         <title>Battle of the Sith</title>
         <link rel="stylesheet" href="app/stylesheets/game.css">
     </head>
-    <body>
+    <body><!--
         <div class="game">
             <div ng-hide="started">
-                <h1 class="gameInst" >Click the Up Arrow to Start</h1>
+                <h1 class="gameInst">Click the Up Arrow to Start</h1>
             </div>
 
             <div class="asteroidRow" ng-repeat="row in listAsteroids">
@@ -17,6 +17,7 @@
             <div/>
             <img class="falcon" id="falcon" ng-src={{darth.img}} style={{falconStyle}}>
             <input class="gameControls" ng-keyup="playGame($event)">
-        </div>f
+        </div>-->
+        <canvas id="myCanvas"></canvas>
     </body>
 </html>

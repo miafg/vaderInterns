@@ -1,8 +1,11 @@
+/*
 .game{
     margin: 0;
     background-color: black;
-    min-height:100%;
-    height:100%
+    width: 100%;
+    height:100%;
+    position: fixed;
+    display: block;
 }
 
 .gameInst {
@@ -18,29 +21,41 @@
 .falcon {
     margin: 0;
     border: 0;
+    position: fixed;
     transform: scale(0.2, 0.2);
 }
 
 .gameControls {
     bottom: 5px;
+    position: fixed;
     left: 0;
-    position: absolute;
 }
 
 .asteroidRow {
-    display: flex;
+    display:block;
     left:0;
     margin: 0;
     padding: 0;
     border: 0;
     width: 100%;
-    height:100%;
+    height:80px;
+    overflow: hidden;
+
+
 }
 
 .asteroidCol {
-    left:0;
     margin: 0;
     border: 0;
     padding: 0;
-    position: absolute;
+
+}
+
+img {
+}*/
+
+canvas {
+    background-color: black;
+    position: relative;
+    z-index: 1;
 }
