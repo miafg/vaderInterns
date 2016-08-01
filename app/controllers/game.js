@@ -7,8 +7,6 @@ app.controller('gameCtrl', ['$scope', '$document', '$window', function($scope, $
     var myGamePiece;
     var asteroidList;
     var finishLine;
-    var lost;
-    var win;
     var gameAnimate = {
         value: false
     };
@@ -112,14 +110,17 @@ app.controller('gameCtrl', ['$scope', '$document', '$window', function($scope, $
         var hOffset = (screenHeight - h) / 2;
         ctx = myGameArea.context;
         ctx.beginPath();
-        ComponentText("Instructions:", wOffset + 10, hOffset + 40, 20, '#FF0000');
-        ComponentText("Use the arrow keys to navigate.", wOffset + 10, hOffset + 60, 20, '#FF0000');
-        ComponentText("Avoid the asteroids in order to make it across the finish line.", wOffset + 10, hOffset + 80, 20, '#FF0000');
-        ComponentText("Press 's' or the space bar to start!", wOffset + 10, hOffset + 100, 20, '#FF0000');
+        ComponentText("Instructions:", wOffset + 20, hOffset + 40, 20, '#FF0000');
+        ComponentText("Use the arrow keys to navigate.", wOffset + 20, hOffset + 60, 20, '#FF0000');
+        ComponentText("Avoid the asteroids in order to make it across the finish line.", wOffset + 20, hOffset + 80, 20, '#FF0000');
+        ComponentText("Press 'p' anytime during the game to pause", wOffset + 20, hOffset + 100, 20, '#FF0000');
+        ComponentText("Press 'q' or 'esc' anytime during the game to quit", wOffset + 20, hOffset + 120, 20, '#FF0000');
+        ComponentText("Press 's' or the space bar to start!", wOffset + 20, hOffset + 140, 20, '#FF0000');
         ctx.fillStyle = 'rgba(40, 40, 40, 0.9)';
         ctx.fillRect(wOffset, hOffset, w, h);
-        ctx.stroke();
         ctx.closePath();
+        ctx.stroke();
+
 
 
     }
@@ -142,8 +143,6 @@ app.controller('gameCtrl', ['$scope', '$document', '$window', function($scope, $
             this.canvas.width = this.canvas.offsetWidth;
             this.canvas.height = this.canvas.offsetHeight;
             this.context.globalCompositeOperation = 'destination-over';
-            lost = false;
-            win = false;
             addFunctionsToComponentImg();
             populateAsteroids();
             createGamePiece();
@@ -196,14 +195,13 @@ app.controller('gameCtrl', ['$scope', '$document', '$window', function($scope, $
         switch (e.keyCode) {
             case 27:
                 //escape
+                gameAnimate.value = false;
                 restartGame();
                 break;
             case 32:
                 //space
-                if (!gameAnimate.value) {
-                    gameAnimate.value = true;
-                    animate();
-                }
+                gameAnimate.value = true;
+                animate();
                 break;
             case 37:
                 //left arrow
@@ -233,6 +231,11 @@ app.controller('gameCtrl', ['$scope', '$document', '$window', function($scope, $
                 //'p'
                 gameAnimate.value = false;
                 break;
+            case 81:
+                //'q'
+                gameAnimate.value = false;
+                restartGame();
+                break;
             case 83:
                 //'s'
                 gameAnimate.value = true;
@@ -245,6 +248,7 @@ app.controller('gameCtrl', ['$scope', '$document', '$window', function($scope, $
     }
 
     function restartGame() {
+        window.removeEventListener('keydown', keyController);
         myGameArea.clear();
         myGameArea.start();
     }
