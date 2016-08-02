@@ -7,11 +7,13 @@ app.controller('gameCtrl', ['$scope', '$document', '$window', function($scope, $
     var myGamePiece;
     var asteroidList;
     var finishLine;
+    var reset;
     var gameAnimate = {
         value: false
     };
 
     function startGame() {
+        myGameArea.setup();
         myGameArea.start();
     }
 
@@ -38,7 +40,8 @@ app.controller('gameCtrl', ['$scope', '$document', '$window', function($scope, $
                 var height = 188 * randScale;
                 var img = "app/images/asteroid.jpg";
                 var comp = new ComponentImg(width, height, img, left, top);
-                comp.initialShow();
+                comp.loadImage();
+                comp.show();
                 asteroidList[i][j] = comp;
             }
         }
@@ -109,26 +112,23 @@ app.controller('gameCtrl', ['$scope', '$document', '$window', function($scope, $
         var wOffset = (screenWidth - w)  / 2;
         var hOffset = (screenHeight - h) / 2;
         ctx = myGameArea.context;
-        ctx.beginPath();
         ComponentText("Instructions:", wOffset + 20, hOffset + 40, 20, '#FF0000');
         ComponentText("Use the arrow keys to navigate.", wOffset + 20, hOffset + 60, 20, '#FF0000');
         ComponentText("Avoid the asteroids in order to make it across the finish line.", wOffset + 20, hOffset + 80, 20, '#FF0000');
         ComponentText("Press 'p' anytime during the game to pause", wOffset + 20, hOffset + 100, 20, '#FF0000');
         ComponentText("Press 'q' or 'esc' anytime during the game to quit", wOffset + 20, hOffset + 120, 20, '#FF0000');
-        ComponentText("Press 's' or the space bar to start!", wOffset + 20, hOffset + 140, 20, '#FF0000');
+        ComponentText("Press 's', enter or the space bar to start!", wOffset + 20, hOffset + 140, 20, '#FF0000');
+        ctx.beginPath();
         ctx.fillStyle = 'rgba(40, 40, 40, 0.9)';
         ctx.fillRect(wOffset, hOffset, w, h);
         ctx.closePath();
         ctx.stroke();
-
-
-
     }
 
     function createGamePiece() {
         var x = myGameArea.getWidth() / 2;
         var y = myGameArea.getHeight() - 100;
-        var width = 50;
+        var width = 30;
         var height = 20;
         myGamePiece = new ComponentImg(width, height, "app/images/falcon.jpg", x, y);
         myGamePiece.loadImage();
@@ -136,7 +136,7 @@ app.controller('gameCtrl', ['$scope', '$document', '$window', function($scope, $
 
     var myGameArea = {
         canvas: document.getElementById("myCanvas"),
-        start: function() {
+        setup: function() {
             this.context = this.canvas.getContext('2d');
             this.canvas.style.width = '100%';
             this.canvas.style.height = '100%';
@@ -144,9 +144,11 @@ app.controller('gameCtrl', ['$scope', '$document', '$window', function($scope, $
             this.canvas.height = this.canvas.offsetHeight;
             this.context.globalCompositeOperation = 'destination-over';
             addFunctionsToComponentImg();
+        },
+        start: function() {
+            reset = false;
             populateAsteroids();
             createGamePiece();
-            myGamePiece.initialShow();
             Instructions();
             drawBoard();
             window.addEventListener('keydown',gameLogic);
@@ -167,7 +169,9 @@ app.controller('gameCtrl', ['$scope', '$document', '$window', function($scope, $
             var fps = 30;
             setTimeout(function() {
                 requestAnimFrame(function () {
-                    updateGameArea();
+                    if (!reset) {
+                        updateGameArea();
+                    }
                 }, 1000/fps);
             });
         }
@@ -175,7 +179,8 @@ app.controller('gameCtrl', ['$scope', '$document', '$window', function($scope, $
 
     function gameLogic(e) {
         var code = e.keyCode;
-        if (code == 83 || code == 32) {
+        console.log(code);
+        if (code == 83 || code == 32 || code == 13) {
             window.removeEventListener('keydown', gameLogic);
             window.addEventListener('keydown', keyController);
             window.requestAnimFrame = (function (callback) {
@@ -183,6 +188,7 @@ app.controller('gameCtrl', ['$scope', '$document', '$window', function($scope, $
                     window.mozRequestAnimationFrame || window.oRequestAnimationFrame ||
                     window.msRequestAnimationFrame
             })();
+            reset = false;
             gameAnimate.value = true;
             animate();
         }
@@ -194,37 +200,50 @@ app.controller('gameCtrl', ['$scope', '$document', '$window', function($scope, $
         var height = myGameArea.getHeight();
         switch (e.keyCode) {
             case 27:
-                //escape
-                gameAnimate.value = false;
-                restartGame();
-                break;
+                //'esc'
+                if (gameAnimate.value) {
+                    gameAnimate.value = false;
+                    myGameArea.start();
+                    reset = true;
+                }
+                return;
             case 32:
                 //space
-                gameAnimate.value = true;
-                animate();
+                if (!gameAnimate.value) {
+                    gameAnimate.value = true;
+                    animate();
+                }
                 break;
             case 37:
                 //left arrow
-                if (myGamePiece.x >= 15) {
-                    myGamePiece.x -= 15;
+                if (gameAnimate.value) {
+                    if (myGamePiece.x >= 15) {
+                        myGamePiece.x -= 15;
+                    }
                 }
                 break;
             case 38:
                 //up arrow
-                if (myGamePiece.y >= 35) {
-                    myGamePiece.y -= 15;
+                if (gameAnimate.value) {
+                    if (myGamePiece.y >= 35) {
+                        myGamePiece.y -= 15;
+                    }
                 }
                 break;
             case 39:
                 //right arrow
-                if (myGamePiece.x < width - 65) {
-                    myGamePiece.x += 15;
+                if (gameAnimate.value) {
+                    if (myGamePiece.x < width - 65) {
+                        myGamePiece.x += 15;
+                    }
                 }
                 break;
             case 40:
                 //down arrow
-                if (myGamePiece.y < height - 105) {
-                    myGamePiece.y += 15;
+                if (gameAnimate.value) {
+                    if (myGamePiece.y < height - 105) {
+                        myGamePiece.y += 15;
+                    }
                 }
                 break;
             case 80:
@@ -233,18 +252,24 @@ app.controller('gameCtrl', ['$scope', '$document', '$window', function($scope, $
                 break;
             case 81:
                 //'q'
-                gameAnimate.value = false;
-                restartGame();
+                if (gameAnimate.value) {
+                    gameAnimate.value = false;
+                    restartGame();
+                    reset = true;
+                    return;
+                }
                 break;
             case 83:
                 //'s'
-                gameAnimate.value = true;
-                animate();
+                if (!gameAnimate.value) {
+                    gameAnimate.value = true;
+                    animate();
+                }
                 break;
             default:
                 break;
-        crossedFinish();
         }
+        crossedFinish();
     }
 
     function restartGame() {
@@ -254,7 +279,6 @@ app.controller('gameCtrl', ['$scope', '$document', '$window', function($scope, $
     }
 
     function drawBoard() {
-        myGameArea.context.restore();
         var x = myGameArea.getWidth() / 2;
         finishLine = new ComponentLine(myGameArea.getWidth(), '#FF0000', 0, 50);
         finishText = new ComponentText("Finish Line", x - 50, 45, 20, '#FF0000');
@@ -262,41 +286,50 @@ app.controller('gameCtrl', ['$scope', '$document', '$window', function($scope, $
     }
 
     function updateGameArea() {
-        myGameArea.clear();
-        var screenWidth = myGameArea.getWidth();
-        var numCols = asteroidList[0].length;
-        var isCollision = false;
-        for (var row = 0; row < asteroidList.length; row++) {
-            for (var col = 0; col < asteroidList[0].length; col++) {
-                var currComponent = asteroidList[row][col];
-                if (currComponent.x > screenWidth + 200) {
-                    var randScale = Math.random() * 0.2 + 0.1;
-                    var width = 175 * randScale;
-                    var height = 188 * randScale;
-                    currComponent.width = width;
-                    currComponent.height = height;
-                    var neighborComp = asteroidList[row][(col + 1) % numCols];
-                    currComponent.x = neighborComp.x - (parseInt(Math.random() * 50) + 100) ;
-                } else {
-                    currComponent.x++;
-                }
-                currComponent.show();
-                isCollision = hasCollided(currComponent.x, myGamePiece.x, currComponent.y, myGamePiece.y,
-                    currComponent.width, myGamePiece.width, currComponent.height, myGamePiece.height);
-                if (isCollision) {
-                    gameAnimate.value = false;
-                    alert("YOU LOSE!");
-                    restartGame();
+        if (!reset) {
+            myGameArea.clear();
+            var screenWidth = myGameArea.getWidth();
+            var numCols = asteroidList[0].length;
+            var isCollision = false;
+            for (var row = 0; row < asteroidList.length; row++) {
+                for (var col = 0; col < asteroidList[0].length; col++) {
+                    var currComponent = asteroidList[row][col];
+                    if (currComponent.x > screenWidth + 200) {
+                        var randScale = Math.random() * 0.2 + 0.1;
+                        var width = 175 * randScale;
+                        var height = 188 * randScale;
+                        currComponent.width = width;
+                        currComponent.height = height;
+                        var neighborComp = asteroidList[row][(col + 1) % numCols];
+                        currComponent.x = neighborComp.x - (parseInt(Math.random() * 50) + 100);
+                    } else {
+                        currComponent.x++;
+                    }
+                    currComponent.show();
+                    isCollision = collisionCheck(currComponent.x, myGamePiece.x, currComponent.y, myGamePiece.y,
+                        currComponent.width, myGamePiece.width, currComponent.height, myGamePiece.height);
+                    if (isCollision) {
+                        gameAnimate.value = false;
+                        alert("YOU LOSE!");
+                        restartGame();
+                        return;
+                    }
                 }
             }
+            drawBoard();
+            animate();
         }
-        drawBoard();
-        animate();
     }
 
-    function hasCollided(x1, x2, y1, y2, width1, width2, height1, height2) {
-        return (x1 > x2 && x1 < x2 + width2 && y1 > y2 && y1 < y2 + height2)
-            || (x2 > x1 && x2 < x1 + width1 && y2 > y1 && y2 < y1 + height1);
+    function collisionCheck(x1, x2, y1, y2, width1, width2, height1, height2) {
+        var borders = (y1 + height1 == y2 && x1 >= x2 && x1 <= x2 + width2) || (y1 == y2 + height2 &&
+            x1 >= x2 && x1 <= x2 + width2) || (x1 == x2 + width2 && y1 >= y2 && y1 <= y2 + width2) ||
+            (x1 + width1 == x2 && y1 >= y2 && y1 <= y2 + height2);
+        var topLeftCorner = x1 >= x2 && x1 <= x2 + width2 && y1 >= y2 && y1 <= y2 + height2;
+        var topRightCorner = x1 + width1 >= x2 && x1 + width1 <= x2 + width2 && y1 >= y2 && y1 <= y2 + height2;
+        var bottomLeftCorner = x1 + width1 >= x2 && x1 + width1 <= x2 + width2 && y1 + height1 >= y2 && y1 + height1 <= y2 + height2;
+        var bottomRightCorner = x1 >= x2 && x1 <= x2 + width2 && y1 + height1 >= y2 && y1 + height1 <= y2 + height2;
+        return borders || topLeftCorner || topRightCorner || bottomLeftCorner || bottomRightCorner;
     }
 
     function crossedFinish() {
@@ -304,6 +337,7 @@ app.controller('gameCtrl', ['$scope', '$document', '$window', function($scope, $
             gameAnimate.value = false;
             alert("YOU WIN!");
             restartGame();
+            reset = true;
         }
     }
 
