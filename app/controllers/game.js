@@ -8,11 +8,14 @@ app.controller('gameCtrl', ['$scope', '$document', '$window', function($scope, $
     var asteroidList;
     var finishLine;
     var reset;
+    var level;
+    var twoPlayer;
     var gameAnimate = {
         value: false
     };
 
     function startGame() {
+        level = 1;
         myGameArea.setup();
         myGameArea.start();
     }
@@ -203,8 +206,9 @@ app.controller('gameCtrl', ['$scope', '$document', '$window', function($scope, $
                 //'esc'
                 if (gameAnimate.value) {
                     gameAnimate.value = false;
-                    myGameArea.start();
+                    restartGame();
                     reset = true;
+                    return;
                 }
                 return;
             case 32:
