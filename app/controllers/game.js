@@ -119,7 +119,6 @@ app.controller('gameCtrl', ['$scope', '$document', '$window', function($scope, $
             ctx.arc(this.x, this.y, 1, 0, 2 * Math.PI, false);
             ctx.fillStyle = '#FF0000';
             ctx.fill();
-            console.log("Trying to draw");
             ctx.closePath();
         }
     }
@@ -431,12 +430,10 @@ app.controller('gameCtrl', ['$scope', '$document', '$window', function($scope, $
                 break;
         }
         if (twoPlayerBox.checked) {
-            if (whoMoved == "tie") {
-                console.log("bullet for tie");
-                addBullet(secondGamePiece.x + secondGamePiece.width / 2, secondGamePiece.y + secondGamePiece.height, 10);
-            } else {
-                console.log("bullet for falcon");
-                addBullet(myGamePiece.x + myGamePiece.width / 2, myGamePiece.y, -10);
+            if (whoMoved == "tie" && secondGamePiece.toDisplay) {
+                addBullet(secondGamePiece.x + secondGamePiece.width / 2, secondGamePiece.y + secondGamePiece.height, 11);
+            } else if (whoMoved == "fal" && myGamePiece.toDisplay) {
+                addBullet(myGamePiece.x + myGamePiece.width / 2, myGamePiece.y, -11);
             }
         }
         crossedFinish();
@@ -566,6 +563,24 @@ app.controller('gameCtrl', ['$scope', '$document', '$window', function($scope, $
                 for (var i = 0; i < bullets.length; i++) {
                     bullets[i].y += bullets[i].move;
                     bullets[i].draw();
+                    var collisionFalcon = collisionBullet(myGamePiece.x, bullets[i].x, myGamePiece.y, bullets[i].y, myGamePiece.width, myGamePiece.height);
+                    var collisionTie = collisionBullet(secondGamePiece.x, bullets[i].x, secondGamePiece.y, bullets[i].y, secondGamePiece.width, secondGamePiece.height);
+                    if (collisionFalcon) {
+                        myGamePiece.toDisplay = false;
+                        if (!secondGamePiece.toDisplay) {
+                            alert("No one wins!");
+                            restartGame();
+                            return;
+                        } 
+                    }
+                    if (collisionTie) {
+                        secondGamePiece.toDisplay = false;
+                        if (!myGamePiece.toDisplay) {
+                            alert("No one wins!");
+                            restartGame();
+                            return;
+                        }
+                    }
                 }
             }
 
