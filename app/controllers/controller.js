@@ -3,16 +3,16 @@
  */
 app.controller('myCtrl', ['$scope', "$mdSidenav", function ($scope, $mdSidenav) {
     $scope.title = "Welcome to the VADER Intern Page Summer 2016";
-    $scope.page = ' Home ';
+    $scope.hash = window.location.hash;
     $scope.menuClick = function () {
         $mdSidenav('sidenav').toggle();
         document.getElementById('menu').blur();
     };
 
-    $scope.menuClose = function ($event) {
+    $scope.menuClose = function (href) {
+        $scope.hash = href;
         $mdSidenav('sidenav').toggle();
-        $scope.page = event.target.innerHTML;
-        if ($scope.page != ' Home ') {
+        if (href != "#/") {
             $scope.title = "VADER Interns Summer 2016";
             $scope.mainTitleStyle = "padding-top:150";
         } else {
@@ -21,4 +21,11 @@ app.controller('myCtrl', ['$scope', "$mdSidenav", function ($scope, $mdSidenav) 
         }
     }
 
+    if ($scope.hash != "#/") {
+        $scope.title = "VADER Interns Summer 2016";
+        $scope.mainTitleStyle = "padding-top:150";
+    } else {
+        $scope.title = "Welcome to the VADER Intern Page Summer 2016";
+        $scope.mainTitleStyle = "padding-top:0";
+    }
 }]);

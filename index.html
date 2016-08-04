@@ -19,7 +19,7 @@
 
     <body ng-app="myApp" ng-controller="myCtrl">
 
-        <header class="container" ng-style="page != ' Battle of the Sith ' ? {'border-bottom': '1px solid #636366'}:
+        <header class="container" ng-style="hash != '#/game' ? {'border-bottom': '1px solid #636366'}:
                                                                                               {'border-bottom': '0px'}">
             <md-content class="icon-menu-content" id="menu" ng-click="menuClick()">
                 <div class="icon-menu" >Menu<i class="fa fa-bars fafaIcon"></i>
@@ -35,14 +35,14 @@
                 </div>
             </div>
             <ul>
-                <li><a href="#/" ng-click="menuClose($event)"> Home </a> </li>
-                <li><a href="#/about" ng-click="menuClose($event)"> About VADER </a></li>
-                <li><a href="#/boris" ng-click="menuClose($event)"> Boris </a> </li>
-                <li><a href="#/luis" ng-click="menuClose($event)"> Luis </a> </li>
-                <li><a href="#/joi" ng-click="menuClose($event)"> Joi </a> </li>
-                <li><a href="#/mia" ng-click="menuClose($event)"> Mia </a> </li>
-                <li><a href="#/darth" ng-click="menuClose($event)"> Fun Facts About Darth </a> </li>
-                <li><a href="#/game" ng-click="menuClose($event)"> Battle of the Sith </a> </li>
+                <li><a href="#/" ng-click="menuClose('#/')"> Home </a> </li>
+                <li><a href="#/about" ng-click="menuClose('#/about')"> About VADER </a></li>
+                <li><a href="#/boris" ng-click="menuClose('#/boris')"> Boris </a> </li>
+                <li><a href="#/luis" ng-click="menuClose('#/luis')"> Luis </a> </li>
+                <li><a href="#/joi" ng-click="menuClose('#/joi')"> Joi </a> </li>
+                <li><a href="#/mia" ng-click="menuClose('#/mia')"> Mia </a> </li>
+                <li><a href="#/darth" ng-click="menuClose('#/darth')"> Fun Facts About Darth </a> </li>
+                <li><a href="#/game" ng-click="menuClose('#/game')"> Battle of the Sith </a> </li>
             </ul>
         </md-sidenav>
 

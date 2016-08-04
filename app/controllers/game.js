@@ -5,38 +5,66 @@
 
 app.controller('gameCtrl', ['$scope', '$document', '$window', function($scope, $document, $window) {
     var myGamePiece;
+    var secondGamePiece;
     var asteroidList;
     var finishLine;
+    var bottomLine;
     var reset;
     var level;
+    var levelText;
     var twoPlayer;
+    var twoPlayerBox;
+    var hasStarted;
+    var bullets;
     var gameAnimate = {
         value: false
     };
 
     function startGame() {
         level = 1;
+        twoPlayerBox = new CheckBox(150,32);
+        myGameArea.canvas.addEventListener('mousedown', function(e) {
+            var x = e.offsetX;
+            var y = e.offsetY;
+            if (x >= 150 && x <= 175 && y >= 32 && y <= 47) {
+                twoPlayerBox.checked = !twoPlayerBox.checked;
+                twoPlayerBox.update();
+                gameAnimate.value = false;
+                level = 1;
+                restartGame();
+                reset = true;
+            }
+
+        });
         myGameArea.setup();
         myGameArea.start();
     }
 
     var populateAsteroids = function() {
         var row = 7;
-        var col = 20;
+        var col;
+        if (!twoPlayerBox.checked) {
+            col = 5;
+        } else {
+            col = 20;
+        }
         var y = myGameArea.getHeight() - 150;
         asteroidList = Array(row);
         //populate asteroids with random positions on screen
         for (var i = 0; i < row; i++) {
             asteroidList[i] = Array(col);
-            y -= 80;
+            y -= 85;
             var x = 0;
             for (var j = 0; j < col; j++) {
                 var top = y;
-                var randSpace = parseInt(Math.random() * 50) + 100;
-                var left = 0;
-                if (j != 0) {
-                    left = randSpace + x;
+                var scale = 150;
+                var mandatorySpace = 150;
+                if (!twoPlayerBox.checked) {
+                    scale = 500 - (50 * level);
+                    mandatorySpace =  300 - (50 * level);
                 }
+                var randSpace = parseInt(Math.random() * scale) + mandatorySpace;
+                var left = x + randSpace;
                 x = left;
                 var randScale = Math.random() * 0.2 + 0.1;
                 var width = 175 * randScale;
@@ -58,20 +86,16 @@ app.controller('gameCtrl', ['$scope', '$document', '$window', function($scope, $
         this.imageLink = image;
         this.imageObject = new Image(width, height);
         this.isLoaded = false;
+        this.toDisplay = true;
     }
 
-    function addFunctionsToComponentImg() {
-        ComponentImg.prototype.initialShow = function (){
-            this.imageObject.src = this.imageLink;
-            var self = this;
-            this.imageObject.onload = function () {
-                self.isLoaded = true;
-                ctx = myGameArea.context;
-                ctx.imageSmoothingEnabled = false;
-                ctx.drawImage(self.imageObject, self.x, self.y, this.width, this.height);
-            }
-        }
+    var Bullet = function(x, y, move) {
+        this.x = x;
+        this.y = y;
+        this.move = move;
+    }
 
+    function addFunctionsToComponents() {
         ComponentImg.prototype.show = function () {
             var img = this.imageObject;
             var x = this.x;
@@ -88,6 +112,15 @@ app.controller('gameCtrl', ['$scope', '$document', '$window', function($scope, $
             this.imageObject.onload = function() {
                 self.isLoaded = true;
             }
+        }
+        Bullet.prototype.draw = function () {
+            ctx = myGameArea.context;
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, 1, 0, 2 * Math.PI, false);
+            ctx.fillStyle = '#FF0000';
+            ctx.fill();
+            console.log("Trying to draw");
+            ctx.closePath();
         }
     }
 
@@ -107,25 +140,60 @@ app.controller('gameCtrl', ['$scope', '$document', '$window', function($scope, $
         ctx.stroke();
     }
 
-    function Instructions() {
+    function InstructionsSinglePlayer() {
         var screenWidth = myGameArea.getWidth();
         var screenHeight = myGameArea.getHeight();
         var w = screenWidth * .7;
         var h = screenHeight * .7;
         var wOffset = (screenWidth - w)  / 2;
-        var hOffset = (screenHeight - h) / 2;
+        var hOffset = (screenHeight - h) / 2 - 32;
         ctx = myGameArea.context;
         ComponentText("Instructions:", wOffset + 20, hOffset + 40, 20, '#FF0000');
         ComponentText("Use the arrow keys to navigate.", wOffset + 20, hOffset + 60, 20, '#FF0000');
         ComponentText("Avoid the asteroids in order to make it across the finish line.", wOffset + 20, hOffset + 80, 20, '#FF0000');
         ComponentText("Press 'p' anytime during the game to pause", wOffset + 20, hOffset + 100, 20, '#FF0000');
         ComponentText("Press 'q' or 'esc' anytime during the game to quit", wOffset + 20, hOffset + 120, 20, '#FF0000');
-        ComponentText("Press 's', enter or the space bar to start!", wOffset + 20, hOffset + 140, 20, '#FF0000');
+        ComponentText("Press enter or the space bar to start!", wOffset + 20, hOffset + 140, 20, '#FF0000');
         ctx.beginPath();
         ctx.fillStyle = 'rgba(40, 40, 40, 0.9)';
         ctx.fillRect(wOffset, hOffset, w, h);
         ctx.closePath();
         ctx.stroke();
+    }
+
+    function InstructionsTwoPlayer() {
+        var screenWidth = myGameArea.getWidth();
+        var screenHeight = myGameArea.getHeight();
+        var w = screenWidth * .7;
+        var h = screenHeight * .7;
+        var wOffset = (screenWidth - w)  / 2;
+        var hOffset = (screenHeight - h) / 2 - 32;
+        ctx = myGameArea.context;
+        ComponentText("Instructions:", wOffset + 20, hOffset + 40, 20, '#FF0000');
+        ComponentText("Player 1 (Falcon Ship): use 'a', 'w', 's' and 'd'", wOffset + 20, hOffset + 60, 20, '#FF0000');
+        ComponentText("Player 2 (Tie Fighter): use arrow keys", wOffset + 20, hOffset + 80, 20, '#FF0000');
+        ComponentText("Avoid the asteroids in order to make it across the finish line.", wOffset + 20, hOffset + 100, 20, '#FF0000');
+        ComponentText("Press 'p' anytime during the game to pause", wOffset + 20, hOffset + 120, 20, '#FF0000');
+        ComponentText("Press 'q' or 'esc' anytime during the game to quit", wOffset + 20, hOffset + 140, 20, '#FF0000');
+        ComponentText("Press enter or the space bar to start!", wOffset + 20, hOffset + 160, 20, '#FF0000');
+        ctx.beginPath();
+        ctx.fillStyle = 'rgba(40, 40, 40, 0.9)';
+        ctx.fillRect(wOffset, hOffset, w, h);
+        ctx.closePath();
+        ctx.stroke();
+    }
+
+    function createTwoGamePieces() {
+        var x1 = myGameArea.getWidth() / 2;
+        var x2 = myGameArea.getWidth() / 2;
+        var y1 = myGameArea.getHeight() - 100;
+        var y2 = 20;
+        var width = 30;
+        var height = 20;
+        myGamePiece = new ComponentImg(width, height, "app/images/falcon.jpg", x1, y1);
+        myGamePiece.loadImage();
+        secondGamePiece = new ComponentImg(width, height,"app/images/tiefighter.JPG" ,x2, y2);
+        secondGamePiece.loadImage();
     }
 
     function createGamePiece() {
@@ -137,6 +205,25 @@ app.controller('gameCtrl', ['$scope', '$document', '$window', function($scope, $
         myGamePiece.loadImage();
     }
 
+    function CheckBox(x,y) {
+        this.x = x;
+        this.y = y;
+        this.width = 15;
+        this.height = 15;
+        this.checked = false;
+        this.update = function() {
+            ctx = myGameArea.context;
+            myGameArea.context.clearRect(this.x - 5, this.y - 5, 25, 21);
+            ctx.lineWidth = 1;
+            ctx.strokeRect(this.x, this.y, this.width, this.height);
+            ctx.font = "26px sans-serif";
+            if (this.checked) {
+                ctx.fillStyle = '#FF0000';
+                ctx.fillText('\u2715', this.x - 2, this.y + 16);
+            }
+        }
+    }
+
     var myGameArea = {
         canvas: document.getElementById("myCanvas"),
         setup: function() {
@@ -146,14 +233,23 @@ app.controller('gameCtrl', ['$scope', '$document', '$window', function($scope, $
             this.canvas.width = this.canvas.offsetWidth;
             this.canvas.height = this.canvas.offsetHeight;
             this.context.globalCompositeOperation = 'destination-over';
-            addFunctionsToComponentImg();
+            addFunctionsToComponents();
         },
         start: function() {
+            hasStarted = false;
             reset = false;
+            bullets = [];
             populateAsteroids();
-            createGamePiece();
-            Instructions();
+            if (twoPlayerBox.checked) {
+                createTwoGamePieces();
+                InstructionsTwoPlayer();
+            } else {
+                createGamePiece();
+                InstructionsSinglePlayer();
+                addMoreAsteroids();
+            }
             drawBoard();
+            twoPlayerBox.update();
             window.addEventListener('keydown',gameLogic);
         },
         getHeight: function () {
@@ -164,6 +260,34 @@ app.controller('gameCtrl', ['$scope', '$document', '$window', function($scope, $
         },
         clear: function() {
             this.context.clearRect(0, 0, this.getWidth(), this.getHeight());
+        }
+    }
+
+    function addMoreAsteroids() {
+        var y = myGameArea.getHeight() - 150;
+        for (var row = 0; row < asteroidList.length; row++) {
+            y -= 85;
+            var x = asteroidList[row][asteroidList[row].length - 1].x;
+            for (var i = 0; i < 2; i++) {
+                var top = y;
+                var scale = 100;
+                var mandatorySpace = 100;
+                if (!twoPlayerBox.checked) {
+                    scale = 500 - (50 * level);
+                    mandatorySpace =  300 - (50 * level);
+                }
+                var randSpace = parseInt(Math.random() * scale) + mandatorySpace;
+                var left = randSpace + x;
+                x = left;
+                var randScale = Math.random() * 0.2 + 0.1;
+                var width = 175 * randScale;
+                var height = 188 * randScale;
+                var img = "app/images/asteroid.jpg";
+                var comp = new ComponentImg(width, height, img, left, top);
+                comp.loadImage();
+                comp.show();
+                asteroidList[row].push(comp);
+            }
         }
     }
 
@@ -182,8 +306,8 @@ app.controller('gameCtrl', ['$scope', '$document', '$window', function($scope, $
 
     function gameLogic(e) {
         var code = e.keyCode;
-        console.log(code);
-        if (code == 83 || code == 32 || code == 13) {
+        if (code == 32 || code == 13) {
+            hasStarted = true;
             window.removeEventListener('keydown', gameLogic);
             window.addEventListener('keydown', keyController);
             window.requestAnimFrame = (function (callback) {
@@ -201,6 +325,7 @@ app.controller('gameCtrl', ['$scope', '$document', '$window', function($scope, $
         //check the key code
         var width = myGameArea.getWidth();
         var height = myGameArea.getHeight();
+        var whoMoved;
         switch (e.keyCode) {
             case 27:
                 //'esc'
@@ -223,6 +348,7 @@ app.controller('gameCtrl', ['$scope', '$document', '$window', function($scope, $
                 if (gameAnimate.value) {
                     if (myGamePiece.x >= 15) {
                         myGamePiece.x -= 15;
+                        whoMoved = "fal";
                     }
                 }
                 break;
@@ -231,6 +357,7 @@ app.controller('gameCtrl', ['$scope', '$document', '$window', function($scope, $
                 if (gameAnimate.value) {
                     if (myGamePiece.y >= 35) {
                         myGamePiece.y -= 15;
+                        whoMoved = "fal";
                     }
                 }
                 break;
@@ -239,6 +366,7 @@ app.controller('gameCtrl', ['$scope', '$document', '$window', function($scope, $
                 if (gameAnimate.value) {
                     if (myGamePiece.x < width - 65) {
                         myGamePiece.x += 15;
+                        whoMoved = "fal";
                     }
                 }
                 break;
@@ -247,6 +375,25 @@ app.controller('gameCtrl', ['$scope', '$document', '$window', function($scope, $
                 if (gameAnimate.value) {
                     if (myGamePiece.y < height - 105) {
                         myGamePiece.y += 15;
+                        whoMoved = "fal";
+                    }
+                }
+                break;
+            case 65:
+                //'a'
+                if (twoPlayerBox.checked && gameAnimate.value) {
+                    if (secondGamePiece.x >= 15) {
+                        secondGamePiece.x -= 15;
+                        whoMoved = "tie";
+                    }
+                }
+                break;
+            case 68:
+                //'d'
+                if (twoPlayerBox.checked && gameAnimate.value) {
+                    if (secondGamePiece.x < width - 65) {
+                        secondGamePiece.x += 15;
+                        whoMoved = "tie";
                     }
                 }
                 break;
@@ -265,15 +412,40 @@ app.controller('gameCtrl', ['$scope', '$document', '$window', function($scope, $
                 break;
             case 83:
                 //'s'
-                if (!gameAnimate.value) {
-                    gameAnimate.value = true;
-                    animate();
+                if (twoPlayerBox.checked && gameAnimate.value) {
+                    if (secondGamePiece.y < height - 105) {
+                        secondGamePiece.y += 15;
+                        whoMoved = "tie";
+                    }
                 }
                 break;
+            case 87:
+                //'w'
+                if (twoPlayerBox.checked && gameAnimate.value) {
+                    if (secondGamePiece.y >= 35) {
+                        secondGamePiece.y -= 15;
+                        whoMoved = "tie";
+                    }
+                }
             default:
                 break;
         }
+        if (twoPlayerBox.checked) {
+            if (whoMoved == "tie") {
+                console.log("bullet for tie");
+                addBullet(secondGamePiece.x + secondGamePiece.width / 2, secondGamePiece.y + secondGamePiece.height, 10);
+            } else {
+                console.log("bullet for falcon");
+                addBullet(myGamePiece.x + myGamePiece.width / 2, myGamePiece.y, -10);
+            }
+        }
         crossedFinish();
+    }
+
+    function addBullet(x, y, move) {
+        var newBullet = new Bullet(x, y, move);
+        newBullet.draw();
+        bullets.push(newBullet);
     }
 
     function restartGame() {
@@ -285,8 +457,26 @@ app.controller('gameCtrl', ['$scope', '$document', '$window', function($scope, $
     function drawBoard() {
         var x = myGameArea.getWidth() / 2;
         finishLine = new ComponentLine(myGameArea.getWidth(), '#FF0000', 0, 50);
-        finishText = new ComponentText("Finish Line", x - 50, 45, 20, '#FF0000');
-        myGamePiece.show();
+        twoPlayer = new ComponentText("Two Player", 20, 45, 20, '#FF0000');
+        twoPlayerBox.update();
+        if (myGamePiece.toDisplay && twoPlayerBox.checked) {
+            myGamePiece.show();
+        } else if (!twoPlayerBox.checked) {
+            myGamePiece.show();
+        }
+
+        if (twoPlayerBox.checked) {
+            if (secondGamePiece.toDisplay) {
+                secondGamePiece.show();
+            }
+            myGameArea.context.lineWidth = 3;
+            bottomLine = new ComponentLine(myGameArea.getWidth(), '#FF0000', 0, myGameArea.getHeight() - 110);
+        } else {
+            if (hasStarted) {
+                levelText = new ComponentText("Level: " + level, myGameArea.getWidth() - 130, 45, 20, '#FF0000');
+                finishText = new ComponentText("Finish Line", x - 50, 45, 20, '#FF0000');
+            }
+        }
     }
 
     function updateGameArea() {
@@ -294,35 +484,98 @@ app.controller('gameCtrl', ['$scope', '$document', '$window', function($scope, $
             myGameArea.clear();
             var screenWidth = myGameArea.getWidth();
             var numCols = asteroidList[0].length;
-            var isCollision = false;
+            var isCollisionFalcon = false;
+            var isCollisionTie = false;
             for (var row = 0; row < asteroidList.length; row++) {
                 for (var col = 0; col < asteroidList[0].length; col++) {
                     var currComponent = asteroidList[row][col];
-                    if (currComponent.x > screenWidth + 200) {
+                    var offset = 500;
+                    if (!twoPlayerBox.checked) {
+                        offset = 600;
+                    }
+                    if (currComponent.x > screenWidth + offset) {
                         var randScale = Math.random() * 0.2 + 0.1;
                         var width = 175 * randScale;
                         var height = 188 * randScale;
                         currComponent.width = width;
                         currComponent.height = height;
                         var neighborComp = asteroidList[row][(col + 1) % numCols];
-                        currComponent.x = neighborComp.x - (parseInt(Math.random() * 50) + 100);
+                        var scale = 150;
+                        var mandatoryOffset = 150;
+                        if (!twoPlayerBox.checked) {
+                            scale = 500 - (50 * level);
+                            mandatorySpace =  300 - (50 * level);
+                        }
+                        currComponent.x = neighborComp.x - (parseInt(Math.random() * scale) + mandatoryOffset);
                     } else {
-                        currComponent.x++;
+                        if (!twoPlayerBox.checked) {
+                            currComponent.x += 1+ level * .1;
+                        } else {
+                            currComponent.x++;
+                        }
                     }
                     currComponent.show();
-                    isCollision = collisionCheck(currComponent.x, myGamePiece.x, currComponent.y, myGamePiece.y,
+                    isCollisionFalcon = collisionCheck(currComponent.x, myGamePiece.x, currComponent.y, myGamePiece.y,
                         currComponent.width, myGamePiece.width, currComponent.height, myGamePiece.height);
-                    if (isCollision) {
-                        gameAnimate.value = false;
-                        alert("YOU LOSE!");
-                        restartGame();
-                        return;
+
+                    if (twoPlayerBox.checked) {
+                        isCollisionTie = collisionCheck(currComponent.x, secondGamePiece.x, currComponent.y, secondGamePiece.y,
+                            currComponent.width, secondGamePiece.width, currComponent.height, secondGamePiece.height);
+                        if (isCollisionTie) {
+                            secondGamePiece.toDisplay = false;
+                            if (!myGamePiece.toDisplay) {
+                                alert("No one wins!");
+                                restartGame();
+                                return;
+                            }
+                        }
+                        //check if any bullets have collided with the rocks
+                        for (var k = 0; k < bullets.length; k++) {
+                            var bulletCollision = collisionBullet(currComponent.x, bullets[k].x, currComponent.y, bullets[k].y, currComponent.width, currComponent.height);
+                            if (bulletCollision) {
+                                bullets.splice(k,1);
+                            }
+                        }
+                    }
+                    if (isCollisionFalcon) {
+                        if (twoPlayerBox.checked) {
+                            myGamePiece.toDisplay = false;
+                            if (!secondGamePiece.toDisplay) {
+                                alert("No one wins!");
+                                restartGame();
+                                return;
+                            }
+                        } else {
+                            level = 1;
+                            gameAnimate.value = false;
+                            alert("YOU LOSE!");
+                            restartGame();
+                            return;
+                        }
                     }
                 }
             }
+            //check two players have collided
+            if (twoPlayerBox.checked) {
+                if (collisionCheck(myGamePiece.x, secondGamePiece.x, myGamePiece.y, secondGamePiece.y,
+                    myGamePiece.width, secondGamePiece.width, myGamePiece.height, secondGamePiece.height)) {
+                    gameAnimate.value = false;
+                    alert("Both players lose!");
+                    restartGame();
+                }
+                for (var i = 0; i < bullets.length; i++) {
+                    bullets[i].y += bullets[i].move;
+                    bullets[i].draw();
+                }
+            }
+
             drawBoard();
             animate();
         }
+    }
+
+    function collisionBullet(objX, x, objY, y, objWidth, objHeight) {
+        return x >= objX && x <= objX + objWidth && y >= objY && y <= objY + objHeight;
     }
 
     function collisionCheck(x1, x2, y1, y2, width1, width2, height1, height2) {
@@ -337,9 +590,28 @@ app.controller('gameCtrl', ['$scope', '$document', '$window', function($scope, $
     }
 
     function crossedFinish() {
+        if (twoPlayerBox.checked) {
+            if (myGamePiece.y + myGamePiece.height <= 50 && secondGamePiece.y >= myGameArea.getHeight() - 110) {
+                gameAnimate.value = false;
+                alert("TIE!");
+                restartGame();
+                reset = true;
+            }
+            if (secondGamePiece.y >= myGameArea.getHeight() - 110) {
+                gameAnimate.value = false;
+                alert("Tie Fighter Wins!");
+                restartGame();
+                reset = true;
+            }
+        }
         if (myGamePiece.y + myGamePiece.height <= 50) {
             gameAnimate.value = false;
-            alert("YOU WIN!");
+            if (twoPlayerBox.checked) {
+                alert("Falcon Wins!");
+            } else {
+                alert("You won level " + level);
+                level++;
+            }
             restartGame();
             reset = true;
         }
