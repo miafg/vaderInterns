@@ -10,20 +10,10 @@ p {
     text-decoration: none;
 }
 
-.link:hover {
+.link:hover, .link:active, .link:visited, .link:focus {
     text-decoration: none;
 }
 
-.link:hover:after{
-    background: #333;
-    background: rgba(0,0,0,.8);
-    border-radius: 5px;
-    bottom: 26px;
-    color: #fff;
-    content: attr(title);
-    left: 20%;
-    padding: 5px 15px;
-    position: absolute;
-    z-index: 98;
-    width: 220px;
+.link:hover{
+    z-index: 99999;
 }
