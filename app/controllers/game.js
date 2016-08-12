@@ -182,6 +182,22 @@ app.controller('gameCtrl', ['$scope', '$document', '$window', function($scope, $
         ctx.stroke();
     }
 
+    function LevelWindow() {
+        var screenWidth = myGameArea.getWidth();
+        var screenHeight = myGameArea.getHeight();
+        var w = screenWidth * .7;
+        var h = screenHeight * .7;
+        var wOffset = (screenWidth - w)  / 2;
+        var hOffset = (screenHeight - h) / 2 - 32;
+        ctx = myGameArea.context;
+        ComponentText("Level Up!", wOffset + w / 2 - 20, hOffset + 40, 20, '#FF0000');
+        ctx.beginPath();
+        ctx.fillStyle = 'rgba(40, 40, 40, 0.9)';
+        ctx.fillRect(wOffset, hOffset, w, h);
+        ctx.closePath();
+        ctx.stroke();
+    }
+
     function createTwoGamePieces() {
         var x1 = myGameArea.getWidth() / 2;
         var x2 = myGameArea.getWidth() / 2;
@@ -244,7 +260,11 @@ app.controller('gameCtrl', ['$scope', '$document', '$window', function($scope, $
                 InstructionsTwoPlayer();
             } else {
                 createGamePiece();
-                InstructionsSinglePlayer();
+                if (level == 1) {
+                    InstructionsSinglePlayer();
+                } else {
+                    LevelWindow();
+                }
                 addMoreAsteroids();
             }
             drawBoard();
