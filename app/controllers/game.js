@@ -460,6 +460,7 @@ app.controller('gameCtrl', ['$scope', '$document', '$window', function($scope, $
             myGamePiece.show();
         } else if (!twoPlayerBox.checked) {
             myGamePiece.show();
+            levelText = new ComponentText("Level: " + level, myGameArea.getWidth() - 130, 45, 20, '#FF0000');
         }
 
         if (twoPlayerBox.checked) {
@@ -470,7 +471,6 @@ app.controller('gameCtrl', ['$scope', '$document', '$window', function($scope, $
             bottomLine = new ComponentLine(myGameArea.getWidth(), '#FF0000', 0, myGameArea.getHeight() - 110);
         } else {
             if (hasStarted) {
-                levelText = new ComponentText("Level: " + level, myGameArea.getWidth() - 130, 45, 20, '#FF0000');
                 finishText = new ComponentText("Finish Line", x - 50, 45, 20, '#FF0000');
             }
         }
