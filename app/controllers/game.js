@@ -61,7 +61,7 @@ app.controller('gameCtrl', ['$scope', '$document', '$window', function($scope, $
                 var mandatorySpace = 150;
                 if (!twoPlayerBox.checked) {
                     scale = 500 - (50 * level);
-                    mandatorySpace =  300 - (50 * level);
+                    mandatorySpace =  300 - (10 * level);
                 }
                 var randSpace = parseInt(Math.random() * scale) + mandatorySpace;
                 var left = x + randSpace;
@@ -293,7 +293,7 @@ app.controller('gameCtrl', ['$scope', '$document', '$window', function($scope, $
                 var mandatorySpace = 100;
                 if (!twoPlayerBox.checked) {
                     scale = 500 - (50 * level);
-                    mandatorySpace =  300 - (50 * level);
+                    mandatorySpace =  400 - (10 * level);
                 }
                 var randSpace = parseInt(Math.random() * scale) + mandatorySpace;
                 var left = randSpace + x;
@@ -504,9 +504,9 @@ app.controller('gameCtrl', ['$scope', '$document', '$window', function($scope, $
             var isCollisionFalcon = false;
             var isCollisionTie = false;
             for (var row = 0; row < asteroidList.length; row++) {
-                for (var col = 0; col < asteroidList[0].length; col++) {
+                for (var col = numCols - 1; col >= 0; col--) {
                     var currComponent = asteroidList[row][col];
-                    var offset = 500;
+                    var offset = 1000;
                     if (!twoPlayerBox.checked) {
                         offset = 600;
                     }
@@ -521,7 +521,7 @@ app.controller('gameCtrl', ['$scope', '$document', '$window', function($scope, $
                         var mandatoryOffset = 150;
                         if (!twoPlayerBox.checked) {
                             scale = 500 - (50 * level);
-                            mandatorySpace =  300 - (50 * level);
+                            mandatoryOffset=  300 - (10 * level);
                         }
                         currComponent.x = neighborComp.x - (parseInt(Math.random() * scale) + mandatoryOffset);
                     } else {
