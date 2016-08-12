@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>About Joi</title>
+    <link rel="stylesheet" href="app/stylesheets/aboutInterns.css">
 </head>
 <body>
     <h1 class="aboutTitle">About Joi Wu</h1>
@@ -10,12 +11,38 @@
         <div class="imageContainer">
             <img ng-src={{joiImage}}>
         </div>
-        <p>
-            <b>School:</b> University of Miami<br>
-            <b>Graduation Date:</b> 2018<br>
-            <b>Major:</b> Mechanical Engineering<br>
-            <b>Hobbies:</b> Hiking, backpacking, baking & eating!<br>
-        </p>
+        <div class="aboutInfo">
+            <div class="about">
+            <p>
+                <b>School:</b> University of Miami<br>
+                <b>Graduation Date:</b> May 2018<br>
+                <b>Major:</b> Mechanical Engineering<br>
+                <b>Hobbies:</b> Hiking, backpacking, baking & eating!<br>
+                <b>What I learned during this internship:</b> I learned how to use Linux commands, code in Ruby, automate processes, test all kinds of software, and I have a newfound love for audio and video!<br>
+                <b>What I loved about this internship:</b> This summer was a wonderful hands-on learning experience - thank you to VADER and to Team AV for teaching me all about the Agile methodology. <br>
+            </p>
+            </div>
+            <div class="social_nav_bar">
+                <a class="link" href="https://www.linkedin.com/in/wujoi" target="_blank">
+                    <span class="fa-stack fa-1x">
+                        <i class= "fa fa-linkedin fa-stack-1x" aria-hidden="true"></i>
+                        <i class= "fa fa-circle-thin fa-stack-2x" aria-hidden="true"></i>
+                    </span>
+                </a>
+                <a class="link" href="https://wujoi.github.io/" target="_blank">
+                    <span class="fa-stack fa-1x">
+                        <i class= "fa fa-github fa-stack-1x" aria-hidden="true"></i>
+                        <i class= "fa fa-circle-thin fa-stack-2x" aria-hidden="true"></i>
+                    </span>
+                </a>
+                <a class="link" ng-href={{email}}>
+                    <span class="fa-stack fa-1x">
+                        <i class= "fa fa-envelope-o fa-stack-1x" aria-hidden="true"></i>
+                        <i class= "fa fa-circle-thin fa-stack-2x" aria-hidden="true"></i>
+                    </span>
+                </a>
+            </div>
+        </div>
     </div>
     <!-- Modules -->
     <script src="../app.js"></script>

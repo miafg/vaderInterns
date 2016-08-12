@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>About Mia</title>
+    <link rel="stylesheet" href="app/stylesheets/aboutInterns.css">
 </head>
 <body>
     <h1 class="aboutTitle">About Mia Froehling Gallier</h1>
@@ -36,12 +37,42 @@
                 </a>
             </div>
         </div>
-        <p>
-            <b>School:</b> University of Pennsylvania<br>
-            <b>Graduation Date:</b> 2017<br>
-            <b>Major:</b> Cognitive Science & Computer Science<br>
-            <b>Hobbies:</b> Hiking, reading, baking, cooking, tennis.<br>
-        </p>
+        <div class="aboutInfo">
+            <div class="about">
+                <p>
+                    <b>School:</b> University of Pennsylvania<br>
+                    <b>Graduation Date:</b> May 2017<br>
+                    <b>Major:</b> Cognitive Science & Computer Science<br>
+                    <b>Hobbies:</b> Hiking, reading, baking, cooking, tennis.<br>
+                    <b>What I learned during this internship:</b> Over the course of the summer, I had the opportunity to learn
+                    a lot of new skills including angularjs, html, css, groovy and ruby. I also had the chance to use skills that I
+                    already had and improve on them, ie. learning new commands in Linux, working in java and agile! I also gained more exposure to
+                    databases and rally.</br>
+                    <b>What I loved about this internship:</b> The people are really what the make the office great and enjoyable environment to work in. I'll miss
+                    our daily standups and the banter that comes with it. </br>
+                </p>
+            </div>
+            <div class="social_nav_bar">
+                <a class="link" href="https://www.linkedin.com/in/mia-froehling-gallier-03761495" target="_blank">
+                    <span class="fa-stack fa-1x">
+                        <i class= "fa fa-linkedin fa-stack-1x" aria-hidden="true"></i>
+                        <i class= "fa fa-circle-thin fa-stack-2x" aria-hidden="true"></i>
+                    </span>
+                </a>
+                <a class="link" href="https://github.com/miafg" target="_blank">
+                    <span class="fa-stack fa-1x">
+                        <i class= "fa fa-github fa-stack-1x" aria-hidden="true"></i>
+                        <i class= "fa fa-circle-thin fa-stack-2x" aria-hidden="true"></i>
+                    </span>
+                </a>
+                <a class="link" ng-href={{email}}>
+                    <span class="fa-stack fa-1x">
+                        <i class= "fa fa-envelope-o fa-stack-1x" aria-hidden="true"></i>
+                        <i class= "fa fa-circle-thin fa-stack-2x" aria-hidden="true"></i>
+                    </span>
+                </a>
+            </div>
+        </div>
     </div>
     <!-- Modules -->
     <script src="../app.js"></script>

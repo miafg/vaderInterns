@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>About Boris</title>
+    <link rel="stylesheet" href="app/stylesheets/aboutInterns.css">
+    <link rel="stylesheet" href="app/font-awesome-4.6.3/css/font-awesome.min.css">
 </head>
 <body>
     <h1 class="aboutTitle">About Boris Kris</h1>
@@ -10,13 +12,39 @@
         <div class="imageContainer">
             <img ng-src={{borisImage}}>
         </div>
-        <p>
-            <b>School:</b> Penn State University<br>
-            <b>Graduation Date:</b> 2017<br>
-            <b>Major:</b> Math & Statistics<br>
-            <b>Hobbies:</b> Philanthropy & running<br>
-        </p>
+        <div class="info">
+            <div class="about">
+            <p>
+                <b>School:</b> Penn State University<br>
+                <b>Graduation Date:</b> December 2017<br>
+                <b>Major:</b> Math & Statistics<br>
+                <b>Hobbies:</b> Philanthropy & running<br>
+                <b>What I learned during this internship:</b> I had the chance to build on some of my skills in Visual Basics,
+                writing some macros to help with Level of Effort Estimations. I also had the opportunity to work with pulling
+                data from rally server and populating a mySQL database. Moving forward, I worked with others on Team 2 in order to
+                provide scrum masters and ultimately senior leadership with data on all teams' performances. </br>
+                <b>What I loved about this internship:</b> The people in the office were incredible to work with throughout
+                the summer. "Office culture" is something you hear a lot about at most companies, but it's pretty incredible
+                to see individuals get along with one another while maintaining such a high level of productivity.</br>
+            </p>
+            </div>
+            <div class="social_nav_bar">
+                <a class="link" href="https://www.linkedin.com/in/boris-kris-284b2595" target="_blank">
+                    <span class="fa-stack fa-1x">
+                        <i class= "fa fa-linkedin fa-stack-1x" aria-hidden="true"></i>
+                        <i class= "fa fa-circle-thin fa-stack-2x" aria-hidden="true"></i>
+                    </span>
+                </a>
+                <a class="link" ng-href={{email}}>
+                    <span class="fa-stack fa-1x">
+                        <i class= "fa fa-envelope-o fa-stack-1x" aria-hidden="true"></i>
+                        <i class= "fa fa-circle-thin fa-stack-2x" aria-hidden="true"></i>
+                    </span>
+                </a>
+            </div>
+        </div>
     </div>
+
     <!-- Modules -->
     <script src="../app.js"></script>
 

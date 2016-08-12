@@ -13,4 +13,5 @@ app.controller('miaCtrl', function($scope) {
         $scope.currentImg = ($scope.currentImg - 1 + 4) % 4;
         console.log(typeof($scope.currentImg));
     };
+    $scope.email = "mailto:miaf@sas.upenn.edu";
 });
